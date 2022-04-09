@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>重复发送请求问题</title>
+	</head>
+	<body>
+		<button>点击发送</button>
+	</body>
+	<script>
+		// 用户一直点击发送按钮，服务器一直接收到相同请求，导致服务器压力很大
+		let xhr = null;
+		// 获取元素对象
+		const btns = document.querySelectorAll('button');
+		// 标识变量
+		let isSending = false; //是否正在发送AJAX请求
+
+		btns[0].onclick = function () {
+			if (isSending) {
+				// 判断标识变量
+				xhr.abort(); //如果正在发送，则取消该请求，创建一个新的请求
+			}
+			xhr = new XMLHttpRequest();
+			//修改 标识变量
+			isSending = true;
+			xhr.open('GET', 'http:127.0.0.1:8000/delay');
+			xhr.send();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4) {
+					isSending = false;
+				}
+			};
+		};
+	</script>
+</html>

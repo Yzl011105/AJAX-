@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>AJAX IE缓存解决方法</title>
+	</head>
+	<style>
+		#result {
+			width: 300px;
+			height: 300px;
+			border: solid 2px black;
+		}
+	</style>
+	<body>
+		<button>点我发送数据</button>
+		<div id="result"></div>
+	</body>
+	<script>
+		const btn = document.getElementsByTagName('button')[0];
+		const result = document.querySelector('#result');
+
+		btn.addEventListener('click', function () {
+			// console.log('test');
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', 'http:127.0.0.1:8000/ie?t=' + Data.now());
+			//IE 会读取缓存 导致最新结果不会呈现
+			//Data.now() 表示获取当前时间戳
+			//因为两次时间戳不同，IE会认为是两次不同的url，就不会走本地缓存
+			xhr.send();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4) {
+					if (xhr.status >= 200 && xhr.status < 300) {
+						result.innerHTML = xhr.response;
+					}
+				}
+			};
+		});
+	</script>
+</html>

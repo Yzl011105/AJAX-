@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>6-取消请求</title>
+	</head>
+	<body>
+		<button>点击发送</button>
+		<button>点击取消</button>
+	</body>
+	<script>
+		let xhr = null;
+		//将xhr定义在外侧，因为处于两个不同的函数，不能直接在函数中用xhr变量的
+		//不使用const，避免xhr值变更，导致控制台报错
+		//获取元素对象
+		const btns = document.querySelectorAll('button');
+		btns[0].onclick = function () {
+			xhr = new XMLHttpRequest();
+			xhr.open('GET', 'http:127.0.0.1:8000/delay');
+			xhr.send();
+		};
+		btns[1].onclick = function () {
+			//取消 abort()
+			xhr.abort();
+		};
+	</script>
+</html>
